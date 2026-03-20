@@ -1,5 +1,6 @@
 import type { ShouldRevalidateFunction } from 'react-router'
 import type { Route } from './+types/root'
+import type { I18nLocale } from '~/lib/i18n'
 import { Analytics, getShopAnalytics, useNonce } from '@shopify/hydrogen'
 import { useEffect } from 'react'
 import {
@@ -15,6 +16,7 @@ import {
 } from 'react-router'
 import favicon from '~/assets/favicon.svg'
 import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments'
+import { SUPPORTED_LOCALES } from '~/lib/i18n'
 import { PageLayout } from './components/layout/PageLayout'
 import baseStyles from './styles/css/index.css?url'
 
@@ -74,10 +76,15 @@ export async function loader(args: Route.LoaderArgs) {
   const criticalData = await loadCriticalData(args)
 
   const { storefront, env } = args.context
+  const selectedLocale = storefront.i18n as I18nLocale
+  const url = new URL(args.request.url)
 
   return {
     ...deferredData,
     ...criticalData,
+    selectedLocale,
+    urlOrigin: url.origin,
+    urlPathname: url.pathname,
     publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
     shop: getShopAnalytics({
       storefront,
@@ -143,9 +150,12 @@ function loadDeferredData({ context }: Route.LoaderArgs) {
 
 export function Layout({ children }: { children?: React.ReactNode }) {
   const nonce = useNonce()
+  const data = useRouteLoaderData<RootLoader>('root')
+  const locale = data?.selectedLocale
+  const hreflangLinks = data ? buildHreflangLinks(data.urlOrigin, data.urlPathname, locale) : []
 
   return (
-    <html lang="en">
+    <html lang={ locale ? `${locale.language.toLowerCase()}-${locale.country}` : 'en' }>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -156,6 +166,9 @@ export function Layout({ children }: { children?: React.ReactNode }) {
           rel="stylesheet"
         />
         <link rel="stylesheet" href={ baseStyles }></link>
+        { hreflangLinks.map(({ hrefLang, href }) => (
+          <link key={ hrefLang } rel="alternate" hrefLang={ hrefLang } href={ href } />
+        )) }
         <Meta />
         <Links />
       </head>
@@ -195,6 +208,34 @@ export default function App() {
       </PageLayout>
     </Analytics.Provider>
   )
+}
+
+/**
+ * 为所有支持的 locale 生成 hreflang alternate 链接
+ *
+ * 输出包含各 locale 的 alternate 以及一个 `x-default` 指向默认 locale
+ */
+function buildHreflangLinks(
+  origin: string,
+  pathname: string,
+  currentLocale?: I18nLocale,
+) {
+  // 去掉当前 locale 前缀，得到裸路径
+  const prefix = currentLocale?.pathPrefix ?? ''
+  const barePath = prefix && pathname.toLowerCase().startsWith(prefix.toLowerCase())
+    ? pathname.slice(prefix.length) || '/'
+    : pathname
+
+  return [
+    ...SUPPORTED_LOCALES.map(l => ({
+      hrefLang: `${l.language.toLowerCase()}-${l.country}`,
+      href: `${origin}${l.pathPrefix}${barePath === '/' ? '' : barePath}`,
+    })),
+    {
+      hrefLang: 'x-default',
+      href: `${origin}${barePath === '/' ? '' : barePath}` || origin,
+    },
+  ]
 }
 
 export function ErrorBoundary() {

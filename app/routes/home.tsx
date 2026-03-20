@@ -7,6 +7,7 @@ import { Image } from '@shopify/hydrogen'
 import { Suspense } from 'react'
 import { Await, Link, useLoaderData } from 'react-router'
 import { ProductItem } from '~/components/product/ProductItem'
+import { useLocalePath, useTranslation } from '~/lib/i18n'
 
 export const meta: Route.MetaFunction = () => {
   return [{ title: 'Flowtica | Home' }]
@@ -41,6 +42,7 @@ function loadDeferredData({ context }: Route.LoaderArgs) {
 
 export default function Homepage() {
   const data = useLoaderData<typeof loader>()
+
   return (
     <div className="-mt-16">
       <FeaturedCollection collection={ data.featuredCollection } />
@@ -56,6 +58,9 @@ function FeaturedCollection({
 }: {
   collection: FeaturedCollectionFragment
 }) {
+  const t = useTranslation('common')
+  const lp = useLocalePath()
+
   if (!collection)
     return null
   const image = collection?.image
@@ -64,7 +69,7 @@ function FeaturedCollection({
     <section className="py-16 md:py-24 bg-background">
       <div className="mx-auto max-w-[1280px] px-4 md:px-8 lg:px-12">
         <Link
-          to={ `/collections/${collection.handle}` }
+          to={ lp(`/collections/${collection.handle}`) }
           className="group block relative overflow-hidden rounded-2xl hover:no-underline"
         >
           {image && (
@@ -83,7 +88,9 @@ function FeaturedCollection({
               {collection.title}
             </h2>
             <span className="inline-block mt-3 text-sm font-medium text-white/80 group-hover:text-white transition-colors">
-              Shop Collection &rarr;
+              {t('shopCollection')}
+              {' '}
+              &rarr;
             </span>
           </div>
         </Link>
@@ -98,18 +105,23 @@ function RecommendedProducts({
 }: {
   products: Promise<RecommendedProductsQuery | null>
 }) {
+  const t = useTranslation('common')
+  const lp = useLocalePath()
+
   return (
     <section className="py-16 md:py-24 bg-background2">
       <div className="mx-auto max-w-[1280px] px-4 md:px-8 lg:px-12">
         <div className="flex items-end justify-between mb-8 md:mb-12">
           <h2 className="text-[clamp(1.5rem,2vw+0.5rem,2.5rem)] font-semibold text-text leading-tight">
-            Recommended Products
+            {t('recommendedProducts')}
           </h2>
           <Link
-            to="/collections"
+            to={ lp('/collections') }
             className="hidden md:inline text-sm font-medium text-text3 hover:text-text transition-colors hover:no-underline"
           >
-            View all &rarr;
+            {t('viewAll')}
+            {' '}
+            &rarr;
           </Link>
         </div>
 
@@ -128,10 +140,12 @@ function RecommendedProducts({
         </Suspense>
 
         <Link
-          to="/collections"
+          to={ lp('/collections') }
           className="md:hidden block text-center mt-8 text-sm font-medium text-text3 hover:text-text transition-colors hover:no-underline"
         >
-          View all products &rarr;
+          {t('viewAllProducts')}
+          {' '}
+          &rarr;
         </Link>
       </div>
     </section>
@@ -155,23 +169,23 @@ function ProductGridSkeleton() {
 
 /** Bottom CTA section */
 function CTASection() {
+  const t = useTranslation('common')
+  const lp = useLocalePath()
+
   return (
     <section className="py-16 md:py-24 bg-button">
       <div className="mx-auto max-w-[768px] px-4 md:px-8 text-center">
-        <h2 className="text-[clamp(1.5rem,2vw+0.5rem,2.5rem)] font-semibold text-textSpecial leading-tight">
-          Your everyday note-taking pen,
-          <br />
-          made intelligent.
+        <h2 className="text-[clamp(1.5rem,2vw+0.5rem,2.5rem)] font-semibold text-textSpecial leading-tight whitespace-pre-line">
+          {t('heroTitle')}
         </h2>
         <p className="mt-6 text-base text-textSpecial/50 max-w-md mx-auto leading-relaxed">
-          Privacy is a principle, not a feature. Everything you record or write
-          is encrypted and stored securely.
+          {t('heroDesc')}
         </p>
         <Link
-          to="/products/flowtica-scribe"
+          to={ lp('/products/flowtica-scribe') }
           className="inline-block mt-8 px-10 py-4 bg-textSpecial text-button text-sm font-semibold rounded-full hover:opacity-90 transition-opacity hover:no-underline"
         >
-          Shop Flowtica Scribe
+          {t('heroCta')}
         </Link>
       </div>
     </section>

@@ -1,0 +1,7 @@
+{
+  "i18n-ally.localesPaths": ["./app/locales"],
+  "i18n-ally.sourceLanguage": "en-US",
+  "i18n-ally.displayLanguage": "zh-CN",
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.autoDetection": true,
+}
