@@ -1,0 +1,49 @@
+@import 'tailwindcss';
+@config '../../../tailwind.config.js';
+
+/* 统一重置 textarea 的焦点样式 */
+@layer base {
+  *, *::before, *::after {
+    @apply box-border;
+  }
+
+  body {
+    @apply m-0 p-0 flex flex-col min-h-screen antialiased text-text;
+  }
+
+  h1, h2, h3, h4, h5, h6, p {
+    @apply m-0 p-0;
+  }
+
+  a {
+    @apply text-inherit no-underline;
+  }
+
+  ul, ol {
+    @apply list-none m-0 p-0;
+  }
+
+  img {
+    @apply rounded-sm;
+  }
+
+  hr {
+    @apply border-t border-border m-0 border-b-0;
+  }
+
+  textarea {
+    @apply resize-none border border-transparent outline-hidden focus:outline-hidden;
+  }
+
+  textarea:focus-visible {
+    @apply border-transparent outline-hidden ring-0 shadow-none;
+  }
+
+  input {
+    outline: none;
+  }
+
+  button {
+    cursor: pointer;
+  }
+}
