@@ -98,27 +98,33 @@ export default function Product() {
   const { title, descriptionHtml } = product
 
   return (
-    <div className="product">
-      <ProductImage image={ selectedVariant?.image } />
-      <div className="product-main">
-        <h1>{title}</h1>
-        <ProductPrice
-          price={ selectedVariant?.price }
-          compareAtPrice={ selectedVariant?.compareAtPrice }
-        />
-        <br />
-        <ProductForm
-          productOptions={ productOptions }
-          selectedVariant={ selectedVariant }
-        />
-        <br />
-        <br />
-        <p>
-          <strong>Description</strong>
-        </p>
-        <br />
-        <div dangerouslySetInnerHTML={ { __html: descriptionHtml } } />
-        <br />
+    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12 lg:gap-16">
+        <ProductImage image={ selectedVariant?.image } />
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-bold tracking-tight text-text sm:text-3xl">{title}</h1>
+          <div className="mt-3">
+            <ProductPrice
+              price={ selectedVariant?.price }
+              compareAtPrice={ selectedVariant?.compareAtPrice }
+            />
+          </div>
+          <div className="mt-8">
+            <ProductForm
+              productOptions={ productOptions }
+              selectedVariant={ selectedVariant }
+            />
+          </div>
+          {descriptionHtml && (
+            <div className="mt-10 border-t border-border pt-8">
+              <h3 className="text-sm font-semibold text-text mb-3">Description</h3>
+              <div
+                className="prose prose-sm text-text2 max-w-none"
+                dangerouslySetInnerHTML={ { __html: descriptionHtml } }
+              />
+            </div>
+          )}
+        </div>
       </div>
       <Analytics.ProductView
         data={ {

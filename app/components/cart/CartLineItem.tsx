@@ -35,58 +35,66 @@ export function CartLineItem({
   const childrenLabelId = `cart-line-children-${id}`
 
   return (
-    <li key={ id } className="cart-line">
-      <div className="cart-line-inner">
+    <li key={ id } className="py-6 first:pt-0">
+      <div className="flex gap-4">
         {image && (
-          <Image
-            alt={ title }
-            aspectRatio="1/1"
-            data={ image }
-            height={ 100 }
-            loading="lazy"
-            width={ 100 }
-          />
+          <div className="shrink-0 overflow-hidden rounded-lg bg-background3">
+            <Image
+              alt={ title }
+              aspectRatio="1/1"
+              data={ image }
+              height={ 100 }
+              loading="lazy"
+              width={ 100 }
+              className="h-24 w-24 object-cover"
+            />
+          </div>
         )}
 
-        <div>
-          <Link
-            prefetch="intent"
-            to={ lineItemUrl }
-            onClick={ () => {
-              if (layout === 'aside') {
-                close()
-              }
-            } }
-          >
-            <p>
-              <strong>{product.title}</strong>
-            </p>
-          </Link>
-          <ProductPrice price={ line?.cost?.totalAmount } />
-          <ul>
-            {selectedOptions.map(option => (
-              <li key={ option.name }>
-                <small>
-                  {option.name}
-                  :
-                  {option.value}
-                </small>
-              </li>
-            ))}
-          </ul>
+        <div className="flex flex-1 flex-col justify-between min-w-0">
+          <div>
+            <Link
+              prefetch="intent"
+              to={ lineItemUrl }
+              onClick={ () => {
+                if (layout === 'aside') {
+                  close()
+                }
+              } }
+              className="hover:text-brand transition-colors"
+            >
+              <p className="text-sm font-medium text-text truncate">
+                {product.title}
+              </p>
+            </Link>
+            <div className="mt-1 text-sm text-text3">
+              <ProductPrice price={ line?.cost?.totalAmount } />
+            </div>
+            {selectedOptions.length > 0 && (
+              <ul className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5">
+                {selectedOptions.map(option => (
+                  <li key={ option.name } className="text-xs text-text3">
+                    {option.name}
+                    :
+                    {option.value}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
           <CartLineQuantity line={ line } />
         </div>
       </div>
 
       {lineItemChildren
         ? (
-            <div>
+            <div className="mt-3 ml-28">
               <p id={ childrenLabelId } className="sr-only">
                 Line items with
                 {' '}
                 {product.title}
               </p>
-              <ul aria-labelledby={ childrenLabelId } className="cart-line-children">
+              <ul aria-labelledby={ childrenLabelId } className="divide-y divide-border/50">
                 {lineItemChildren.map(childLine => (
                   <CartLineItem
                     childrenMap={ childrenMap }
@@ -105,8 +113,6 @@ export function CartLineItem({
 
 /**
  * 提供在购物车中更新行项目数量的控件。
- * 当行项目是新的且服务器尚未响应
- * 已成功添加到购物车时，这些控件被禁用。
  */
 function CartLineQuantity({ line }: { line: CartLine }) {
   if (!line || typeof line?.quantity === 'undefined')
@@ -116,43 +122,41 @@ function CartLineQuantity({ line }: { line: CartLine }) {
   const nextQuantity = Number((quantity + 1).toFixed(0))
 
   return (
-    <div className="cart-line-quantity">
-      <small>
-        Quantity:
-        {quantity}
-        {' '}
-&nbsp;&nbsp;
-      </small>
-      <CartLineUpdateButton lines={ [{ id: lineId, quantity: prevQuantity }] }>
-        <button
-          aria-label="Decrease quantity"
-          disabled={ quantity <= 1 || !!isOptimistic }
-          name="decrease-quantity"
-          value={ prevQuantity }
-        >
-          <span>&#8722; </span>
-        </button>
-      </CartLineUpdateButton>
-      &nbsp;
-      <CartLineUpdateButton lines={ [{ id: lineId, quantity: nextQuantity }] }>
-        <button
-          aria-label="Increase quantity"
-          name="increase-quantity"
-          value={ nextQuantity }
-          disabled={ !!isOptimistic }
-        >
-          <span>&#43;</span>
-        </button>
-      </CartLineUpdateButton>
-      &nbsp;
+    <div className="mt-2 flex items-center gap-2">
+      <div className="flex items-center rounded-lg border border-border">
+        <CartLineUpdateButton lines={ [{ id: lineId, quantity: prevQuantity }] }>
+          <button
+            aria-label="Decrease quantity"
+            disabled={ quantity <= 1 || !!isOptimistic }
+            name="decrease-quantity"
+            value={ prevQuantity }
+            className="flex h-8 w-8 items-center justify-center text-text3 transition-colors hover:text-text disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            <span className="text-sm">&#8722;</span>
+          </button>
+        </CartLineUpdateButton>
+        <span className="flex h-8 w-8 items-center justify-center text-sm font-medium text-text">
+          {quantity}
+        </span>
+        <CartLineUpdateButton lines={ [{ id: lineId, quantity: nextQuantity }] }>
+          <button
+            aria-label="Increase quantity"
+            name="increase-quantity"
+            value={ nextQuantity }
+            disabled={ !!isOptimistic }
+            className="flex h-8 w-8 items-center justify-center text-text3 transition-colors hover:text-text disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            <span className="text-sm">&#43;</span>
+          </button>
+        </CartLineUpdateButton>
+      </div>
       <CartLineRemoveButton lineIds={ [lineId] } disabled={ !!isOptimistic } />
     </div>
   )
 }
 
 /**
- * 从购物车中删除行项目的按钮。当行项目是新的且
- * 服务器尚未响应已成功添加到购物车时，它被禁用。
+ * 从购物车中删除行项目的按钮。
  */
 function CartLineRemoveButton({
   lineIds,
@@ -168,7 +172,11 @@ function CartLineRemoveButton({
       action={ CartForm.ACTIONS.LinesRemove }
       inputs={ { lineIds } }
     >
-      <button disabled={ disabled } type="submit">
+      <button
+        disabled={ disabled }
+        type="submit"
+        className="text-xs text-text3 underline-offset-2 hover:text-danger hover:underline transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+      >
         Remove
       </button>
     </CartForm>
@@ -197,12 +205,7 @@ function CartLineUpdateButton({
 }
 
 /**
- * 为更新操作返回一个唯一的键。这用于确保修改相同行项目的
- * 操作不会并发运行，而是相互取消。例如，如果用户
- * 快速连续点击"增加数量"和"减少数量"，
- * 操作将相互取消，只有最后一个会运行。
- * @param lineIds - 受更新影响的行ID
- * @returns
+ * 为更新操作返回一个唯一的键。
  */
 function getUpdateKey(lineIds: string[]) {
   return [CartForm.ACTIONS.LinesUpdate, ...lineIds].join('-')

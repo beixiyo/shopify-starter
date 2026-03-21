@@ -11,8 +11,6 @@ type CartSummaryProps = {
 }
 
 export function CartSummary({ cart, layout }: CartSummaryProps) {
-  const className
-    = layout === 'page' ? 'cart-summary-page' : 'cart-summary-aside'
   const summaryId = useId()
   const discountsHeadingId = useId()
   const discountCodeInputId = useId()
@@ -20,18 +18,17 @@ export function CartSummary({ cart, layout }: CartSummaryProps) {
   const giftCardInputId = useId()
 
   return (
-    <div aria-labelledby={ summaryId } className={ className }>
-      <h4 id={ summaryId }>Totals</h4>
-      <dl role="group" className="cart-subtotal">
-        <dt>Subtotal</dt>
-        <dd>
+    <div
+      aria-labelledby={ summaryId }
+      className={ `mt-8 border-t border-border pt-8 ${layout === 'aside' ? '' : 'max-w-md ml-auto'}` }
+    >
+      <h4 id={ summaryId } className="text-lg font-semibold text-text mb-4">Totals</h4>
+      <dl className="flex items-center justify-between text-sm">
+        <dt className="text-text2">Subtotal</dt>
+        <dd className="font-medium text-text">
           {cart?.cost?.subtotalAmount?.amount
-            ? (
-                <Money data={ cart?.cost?.subtotalAmount } />
-              )
-            : (
-                '-'
-              )}
+            ? <Money data={ cart?.cost?.subtotalAmount } />
+            : '-'}
         </dd>
       </dl>
       <CartDiscounts
@@ -54,11 +51,14 @@ function CartCheckoutActions({ checkoutUrl }: { checkoutUrl?: string }) {
     return null
 
   return (
-    <div>
-      <a href={ checkoutUrl } target="_self">
-        <p>Continue to Checkout &rarr;</p>
+    <div className="mt-6">
+      <a
+        href={ checkoutUrl }
+        target="_self"
+        className="flex w-full items-center justify-center rounded-lg bg-button py-3 px-6 text-sm font-medium text-background transition-opacity hover:opacity-90"
+      >
+        Continue to Checkout &rarr;
       </a>
-      <br />
     </div>
   )
 }
@@ -78,20 +78,24 @@ function CartDiscounts({
       ?.map(({ code }) => code) || []
 
   return (
-    <section aria-label="Discounts">
-      {/* Have existing discount, display it with a remove option */}
+    <section aria-label="Discounts" className="mt-4">
       <dl hidden={ !codes.length }>
-        <div>
-          <dt id={ discountsHeadingId }>Discounts</dt>
+        <div className="flex items-center justify-between text-sm">
+          <dt id={ discountsHeadingId } className="text-text2">Discounts</dt>
           <UpdateDiscountForm>
             <div
-              className="cart-discount"
               role="group"
               aria-labelledby={ discountsHeadingId }
+              className="flex items-center gap-2"
             >
-              <code>{codes?.join(', ')}</code>
-              &nbsp;
-              <button type="submit" aria-label="Remove discount">
+              <code className="rounded bg-background3 px-2 py-0.5 text-xs font-medium text-text">
+                {codes?.join(', ')}
+              </code>
+              <button
+                type="submit"
+                aria-label="Remove discount"
+                className="text-xs text-text3 hover:text-danger transition-colors"
+              >
                 Remove
               </button>
             </div>
@@ -99,9 +103,8 @@ function CartDiscounts({
         </div>
       </dl>
 
-      {/* Show an input to apply a discount */}
       <UpdateDiscountForm discountCodes={ codes }>
-        <div>
+        <div className="flex gap-2 mt-3">
           <label htmlFor={ discountCodeInputId } className="sr-only">
             Discount code
           </label>
@@ -110,9 +113,13 @@ function CartDiscounts({
             type="text"
             name="discountCode"
             placeholder="Discount code"
+            className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-text placeholder:text-text3 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
           />
-          &nbsp;
-          <button type="submit" aria-label="Apply discount code">
+          <button
+            type="submit"
+            aria-label="Apply discount code"
+            className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-text transition-colors hover:bg-background3"
+          >
             Apply
           </button>
         </div>
@@ -198,12 +205,12 @@ function CartGiftCard({
   }
 
   return (
-    <section aria-label="Gift cards">
+    <section aria-label="Gift cards" className="mt-4">
       {giftCardCodes && giftCardCodes.length > 0 && (
         <dl>
-          <dt id={ giftCardHeadingId }>Applied Gift Card(s)</dt>
+          <dt id={ giftCardHeadingId } className="text-sm text-text2 mb-2">Applied Gift Card(s)</dt>
           {giftCardCodes.map(giftCard => (
-            <dd key={ giftCard.id } className="cart-discount">
+            <dd key={ giftCard.id } className="flex items-center gap-2 text-sm mb-1">
               <RemoveGiftCardForm
                 giftCardId={ giftCard.id }
                 lastCharacters={ giftCard.lastCharacters }
@@ -217,12 +224,13 @@ function CartGiftCard({
                   }
                 } }
               >
-                <code>
+                <code className="rounded bg-background3 px-2 py-0.5 text-xs font-medium text-text">
                   ***
                   {giftCard.lastCharacters}
                 </code>
-                &nbsp;
-                <Money data={ giftCard.amountUsed } />
+                <span className="text-text2">
+                  <Money data={ giftCard.amountUsed } />
+                </span>
               </RemoveGiftCardForm>
             </dd>
           ))}
@@ -230,7 +238,7 @@ function CartGiftCard({
       )}
 
       <AddGiftCardForm fetcherKey="gift-card-add">
-        <div>
+        <div className="flex gap-2 mt-3">
           <label htmlFor={ giftCardInputId } className="sr-only">
             Gift card code
           </label>
@@ -240,12 +248,13 @@ function CartGiftCard({
             name="giftCardCode"
             placeholder="Gift card code"
             ref={ giftCardCodeInput }
+            className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-text placeholder:text-text3 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
           />
-          &nbsp;
           <button
             type="submit"
             disabled={ giftCardAddFetcher.state !== 'idle' }
             aria-label="Apply gift card code"
+            className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-text transition-colors hover:bg-background3 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Apply
           </button>
@@ -294,16 +303,18 @@ function RemoveGiftCardForm({
         giftCardCodes: [giftCardId],
       } }
     >
-      {children}
-      &nbsp;
-      <button
-        type="submit"
-        aria-label={ `Remove gift card ending in ${lastCharacters}` }
-        onClick={ onRemoveClick }
-        ref={ buttonRef }
-      >
-        Remove
-      </button>
+      <div className="flex items-center gap-2">
+        {children}
+        <button
+          type="submit"
+          aria-label={ `Remove gift card ending in ${lastCharacters}` }
+          onClick={ onRemoveClick }
+          ref={ buttonRef }
+          className="text-xs text-text3 hover:text-danger transition-colors"
+        >
+          Remove
+        </button>
+      </div>
     </CartForm>
   )
 }

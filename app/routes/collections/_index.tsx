@@ -46,11 +46,11 @@ export default function Collections() {
   const { collections } = useLoaderData<typeof loader>()
 
   return (
-    <div className="collections">
-      <h1>Collections</h1>
+    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <h1 className="text-3xl font-bold tracking-tight text-text mb-8">Collections</h1>
       <PaginatedResourceSection<CollectionFragment>
         connection={ collections }
-        resourcesClassName="collections-grid"
+        resourcesClassName="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
       >
         {({ node: collection, index }) => (
           <CollectionItem
@@ -73,21 +73,26 @@ function CollectionItem({
 }) {
   return (
     <Link
-      className="collection-item"
+      className="group block overflow-hidden rounded-xl hover:no-underline"
       key={ collection.id }
       to={ `/collections/${collection.handle}` }
       prefetch="intent"
     >
       {collection?.image && (
-        <Image
-          alt={ collection.image.altText || collection.title }
-          aspectRatio="1/1"
-          data={ collection.image }
-          loading={ index < 3 ? 'eager' : undefined }
-          sizes="(min-width: 45em) 400px, 100vw"
-        />
+        <div className="overflow-hidden rounded-xl bg-background3">
+          <Image
+            alt={ collection.image.altText || collection.title }
+            aspectRatio="1/1"
+            data={ collection.image }
+            loading={ index < 3 ? 'eager' : undefined }
+            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        </div>
       )}
-      <h5>{collection.title}</h5>
+      <h5 className="mt-3 text-base font-medium text-text group-hover:text-brand transition-colors">
+        {collection.title}
+      </h5>
     </Link>
   )
 }

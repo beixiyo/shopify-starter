@@ -18,16 +18,15 @@ export function ProductForm({
   const navigate = useNavigate()
   const { open } = useAside()
   return (
-    <div className="product-form">
+    <div className="space-y-6">
       {productOptions.map((option) => {
-        // 如果选项值中只有一个值，不显示该选项
         if (option.optionValues.length === 1)
           return null
 
         return (
-          <div className="product-options" key={ option.name }>
-            <h5>{option.name}</h5>
-            <div className="product-options-grid">
+          <div key={ option.name }>
+            <h5 className="text-sm font-medium text-text mb-3">{option.name}</h5>
+            <div className="flex flex-wrap gap-2">
               {option.optionValues.map((value) => {
                 const {
                   name,
@@ -40,47 +39,32 @@ export function ProductForm({
                   swatch,
                 } = value
 
+                const baseClass = `relative flex items-center justify-center rounded-lg border px-4 py-2 text-sm transition-all ${
+                  selected
+                    ? 'border-text bg-text text-background font-medium'
+                    : 'border-border text-text hover:border-text'
+                } ${!available ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer'}`
+
                 if (isDifferentProduct) {
-                  // SEO优化
-                  // 当变体是导致不同URL的组合列表子产品时，
-                  // 需要将其渲染为锚标记
                   return (
                     <Link
-                      className="product-options-item"
+                      className={ baseClass }
                       key={ option.name + name }
                       prefetch="intent"
                       preventScrollReset
                       replace
                       to={ `/products/${handle}?${variantUriQuery}` }
-                      style={ {
-                        border: selected
-                          ? '1px solid black'
-                          : '1px solid transparent',
-                        opacity: available ? 1 : 0.3,
-                      } }
                     >
                       <ProductOptionSwatch swatch={ swatch } name={ name } />
                     </Link>
                   )
                 }
                 else {
-                  // SEO优化
-                  // 当变体是搜索参数的更新时，
-                  // 将其渲染为使用JavaScript导航的按钮，
-                  // 以便SEO机器人不会将这些索引为重复链接
                   return (
                     <button
                       type="button"
-                      className={ `product-options-item${
-                        exists && !selected ? ' link' : ''
-                      }` }
+                      className={ baseClass }
                       key={ option.name + name }
-                      style={ {
-                        border: selected
-                          ? '1px solid black'
-                          : '1px solid transparent',
-                        opacity: available ? 1 : 0.3,
-                      } }
                       disabled={ !exists }
                       onClick={ () => {
                         if (!selected) {
@@ -97,7 +81,6 @@ export function ProductForm({
                 }
               })}
             </div>
-            <br />
           </div>
         )
       })}
@@ -140,12 +123,12 @@ function ProductOptionSwatch({
   return (
     <div
       aria-label={ name }
-      className="product-option-label-swatch"
+      className="h-6 w-6 rounded-full border border-border2"
       style={ {
         backgroundColor: color || 'transparent',
       } }
     >
-      {!!image && <img src={ image } alt={ name } />}
+      {!!image && <img src={ image } alt={ name } className="h-full w-full rounded-full object-cover" />}
     </div>
   )
 }

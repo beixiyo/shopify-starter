@@ -23,7 +23,14 @@ export function PaginatedResourceSection<NodesType>({
         return (
           <div>
             <PreviousLink>
-              {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
+              {isLoading
+                ? 'Loading...'
+                : (
+                    <span className="flex items-center justify-center gap-2 py-4 text-sm text-text2 hover:text-text transition-colors cursor-pointer">
+                      <span>↑</span>
+                      Load previous
+                    </span>
+                  )}
             </PreviousLink>
             {resourcesClassName
               ? (
@@ -33,7 +40,14 @@ export function PaginatedResourceSection<NodesType>({
                   resourcesMarkup
                 )}
             <NextLink>
-              {isLoading ? 'Loading...' : <span>Load more ↓</span>}
+              {isLoading
+                ? 'Loading...'
+                : (
+                    <span className="flex items-center justify-center gap-2 py-6 text-sm font-medium text-text2 hover:text-text transition-colors cursor-pointer">
+                      Load more
+                      <span>↓</span>
+                    </span>
+                  )}
             </NextLink>
           </div>
         )

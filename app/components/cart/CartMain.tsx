@@ -40,49 +40,39 @@ function getLineItemChildrenMap(lines: CartLine[]): LineItemChildrenMap {
  * It is used by both the /cart route and the cart aside dialog.
  */
 export function CartMain({ layout, cart: originalCart }: CartMainProps) {
-  // The useOptimisticCart hook applies pending actions to the cart
-  // so the user immediately sees feedback when they modify the cart.
   const cart = useOptimisticCart(originalCart)
 
   const linesCount = Boolean(cart?.lines?.nodes?.length || 0)
-  const withDiscount
-    = cart
-      && Boolean(cart?.discountCodes?.filter(code => code.applicable)?.length)
-  const className = `cart-main ${withDiscount ? 'with-discount' : ''}`
   const cartHasItems = cart?.totalQuantity ? cart.totalQuantity > 0 : false
   const childrenMap = getLineItemChildrenMap(cart?.lines?.nodes ?? [])
 
   return (
     <section
-      className={ className }
       aria-label={ layout === 'page' ? 'Cart page' : 'Cart drawer' }
     >
       <CartEmpty hidden={ linesCount } layout={ layout } />
-      <div className="cart-details">
+      <div>
         <p id="cart-lines" className="sr-only">
           Line items
         </p>
-        <div>
-          <ul aria-labelledby="cart-lines">
-            {(cart?.lines?.nodes ?? []).map((line) => {
-              // we do not render non-parent lines at the root of the cart
-              if (
-                'parentRelationship' in line
-                && line.parentRelationship?.parent
-              ) {
-                return null
-              }
-              return (
-                <CartLineItem
-                  key={ line.id }
-                  line={ line }
-                  layout={ layout }
-                  childrenMap={ childrenMap }
-                />
-              )
-            })}
-          </ul>
-        </div>
+        <ul aria-labelledby="cart-lines" className="divide-y divide-border">
+          {(cart?.lines?.nodes ?? []).map((line) => {
+            if (
+              'parentRelationship' in line
+              && line.parentRelationship?.parent
+            ) {
+              return null
+            }
+            return (
+              <CartLineItem
+                key={ line.id }
+                line={ line }
+                layout={ layout }
+                childrenMap={ childrenMap }
+              />
+            )
+          })}
+        </ul>
         {cartHasItems && <CartSummary cart={ cart } layout={ layout } />}
       </div>
     </section>
@@ -97,15 +87,18 @@ function CartEmpty({
 }) {
   const { close } = useAside()
   return (
-    <div hidden={ hidden }>
-      <br />
-      <p>
-        Looks like you haven&rsquo;t added anything yet, let&rsquo;s get you
-        started!
+    <div hidden={ hidden } className="flex flex-col items-center justify-center py-16 text-center">
+      <p className="text-text3 text-lg mb-6">
+        Looks like you haven&rsquo;t added anything yet, let&rsquo;s get you started!
       </p>
-      <br />
-      <Link to="/collections" onClick={ close } prefetch="viewport">
-        Continue shopping →
+      <Link
+        to="/collections"
+        onClick={ close }
+        prefetch="viewport"
+        className="inline-flex items-center gap-2 rounded-lg bg-button px-6 py-3 text-sm font-medium text-background transition-opacity hover:opacity-90"
+      >
+        Continue shopping
+        <span>&rarr;</span>
       </Link>
     </div>
   )
