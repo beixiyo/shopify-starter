@@ -271,6 +271,23 @@ import { Pagination } from '@shopify/hydrogen'
 - **查看生成的类型**：`storefrontapi.generated.d.ts` 文件
 - **Storefront API 文档**：https://shopify.dev/docs/api/storefront
 - **VS Code 插件**：安装 GraphQL 插件，配合 `.graphqlrc.ts` 获得自动补全
+- **loader 调试**：在 loader 中 `console.log()` 输出会出现在**终端**（运行 `pnpm dev` 的窗口），不在浏览器 DevTools
+
+### 在 Shopify 后台查找 Product / Variant ID
+
+Storefront API 使用 GID 格式的 ID（如 `gid://shopify/ProductVariant/47216813670656`），后台 URL 中的数字部分就是 GID 的末尾数字：
+
+1. 登录 `admin.shopify.com/store/flowtica`
+2. 进入 **Products** → 点击某个产品
+3. **Product ID**：地址栏 `products/` 后的数字，如 `products/9200928260352` → GID 为 `gid://shopify/Product/9200928260352`
+4. **Variant ID**：点击左侧某个 variant，地址栏变为 `products/9200928260352/variants/47216813670656` → GID 为 `gid://shopify/ProductVariant/47216813670656`
+
+当前使用的关键 ID：
+
+| 产品 | Variant 名称 | Variant ID | GID |
+|------|-------------|------------|-----|
+| Flowtica Scribe | （取最低价 `priceRange.minVariantPrice`） | — | — |
+| Flowtica Scribe Power Set | Satin Gunmetal / Power Set / Not Now | `47216813670656` | `gid://shopify/ProductVariant/47216813670656` |
 
 ---
 
