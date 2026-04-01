@@ -6,6 +6,7 @@
   "scripts": {
     "// ── 开发 ──": "",
     "dev": "shopify hydrogen dev --codegen",
+    "dev:customer": "shopify hydrogen dev --codegen --customer-account-push",
     "debug": "shopify hydrogen dev --codegen --debug",
     "preview": "shopify hydrogen preview --build",
     "// ── 构建 ──": "",
