@@ -23,7 +23,6 @@ export default async function handleRequest(
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
     },
     ...(isDev && {
-      connectSrc: ['\'self\'', 'https://www.react-grab.com'],
       styleSrc: ['\'self\'', '\'unsafe-inline\'', 'https://fonts.googleapis.com'],
       fontSrc: ['\'self\'', 'https://fonts.gstatic.com'],
     }),

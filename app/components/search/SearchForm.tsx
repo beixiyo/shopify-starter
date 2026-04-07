@@ -28,7 +28,7 @@ type SearchFormProps = Omit<FormProps, 'children'> & {
  *  </SearchForm>
  */
 export function SearchForm({ children, ...props }: SearchFormProps) {
-  const inputRef = useRef<HTMLInputElement | null>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   useFocusOnCmdK(inputRef)
 

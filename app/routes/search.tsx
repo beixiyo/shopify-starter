@@ -42,39 +42,56 @@ export default function SearchPage() {
     return null
 
   return (
-    <div className="search">
-      <h1>Search</h1>
-      <SearchForm>
-        {({ inputRef }) => (
-          <>
-            <input
-              defaultValue={ term }
-              name="q"
-              placeholder="Search…"
-              ref={ inputRef }
-              type="search"
-            />
-            &nbsp;
-            <button type="submit">Search</button>
-          </>
-        )}
-      </SearchForm>
-      {error && <p style={ { color: 'red' } }>{error}</p>}
-      {!term || !result?.total
-        ? (
-            <SearchResults.Empty />
-          )
-        : (
-            <SearchResults result={ result } term={ term }>
-              {({ articles, pages, products, term }) => (
-                <div>
-                  <SearchResults.Products products={ products } term={ term } />
-                  <SearchResults.Pages pages={ pages } term={ term } />
-                  <SearchResults.Articles articles={ articles } term={ term } />
-                </div>
-              )}
-            </SearchResults>
+    <div className="w-full max-w-5xl mx-auto px-4 py-16 md:py-24">
+      <div className="flex flex-col items-center text-center mb-16">
+        <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-text mb-8">
+          Search
+        </h1>
+        <SearchForm className="w-full max-w-2xl relative flex items-center group">
+          {({ inputRef }) => (
+            <>
+              <div className="absolute left-4 text-text4 pointer-events-none">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+              </div>
+              <input
+                defaultValue={ term }
+                name="q"
+                placeholder="Search products, articles, and pages…"
+                ref={ inputRef }
+                type="search"
+                className="w-full h-14 pl-12 pr-24 bg-background2/50 border border-border2 rounded-2xl text-lg text-text placeholder:text-text4 focus:outline-none focus:ring-2 focus:ring-text focus:border-transparent transition-all duration-300"
+              />
+              <button 
+                type="submit"
+                className="absolute right-2 px-4 py-2 bg-text text-background rounded-xl text-sm font-medium hover:opacity-80 transition-opacity"
+              >
+                Search
+              </button>
+            </>
           )}
+        </SearchForm>
+        {error && <p className="mt-4 text-danger text-sm">{error}</p>}
+      </div>
+
+      <div className="w-full">
+        {!term || !result?.total
+          ? (
+              <SearchResults.Empty />
+            )
+          : (
+              <SearchResults result={ result } term={ term }>
+                {({ articles, pages, products, term }) => (
+                  <div className="flex flex-col gap-16">
+                    <SearchResults.Products products={ products } term={ term } />
+                    <SearchResults.Pages pages={ pages } term={ term } />
+                    <SearchResults.Articles articles={ articles } term={ term } />
+                  </div>
+                )}
+              </SearchResults>
+            )}
+      </div>
       <Analytics.SearchView data={ { searchTerm: term, searchResults: result } } />
     </div>
   )

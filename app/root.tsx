@@ -2,7 +2,6 @@ import type { ShouldRevalidateFunction } from 'react-router'
 import type { Route } from './+types/root'
 import type { I18nLocale } from '~/lib/i18n'
 import { Analytics, getShopAnalytics, useNonce } from '@shopify/hydrogen'
-import { useEffect } from 'react'
 import {
   isRouteErrorResponse,
   Links,
@@ -19,6 +18,7 @@ import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments'
 import { SUPPORTED_LOCALES } from '~/lib/i18n'
 import { PageLayout } from './components/layout/PageLayout'
 import baseStyles from './styles/css/index.css?url'
+import { lazy } from 'react'
 
 export type RootLoader = typeof loader
 
@@ -181,17 +181,12 @@ export function Layout({ children }: { children?: React.ReactNode }) {
   )
 }
 
+const DevAgentation = import.meta.env.DEV
+  ? lazy(() => import('agentation').then(m => ({ default: m.Agentation })))
+  : () => null
+
 export default function App() {
   const data = useRouteLoaderData<RootLoader>('root')
-
-  useEffect(
-    () => {
-      if (import.meta.env.DEV && typeof window !== 'undefined') {
-        import('react-grab')
-      }
-    },
-    [],
-  )
 
   if (!data) {
     return <Outlet />
@@ -203,6 +198,8 @@ export default function App() {
       shop={ data.shop }
       consent={ data.consent }
     >
+      <DevAgentation />
+
       <PageLayout { ...data }>
         <Outlet />
       </PageLayout>

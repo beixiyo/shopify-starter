@@ -11,7 +11,6 @@ import { PassThrough } from 'node:stream'
 import { createReadableStreamFromReadable } from '@react-router/node'
 import { createContentSecurityPolicy } from '@shopify/hydrogen'
 import { isbot } from 'isbot'
-// @ts-expect-error 从 server.node 导入，绕过 vite alias（react-dom/server → server.browser）
 import { renderToPipeableStream } from 'react-dom/server.node'
 import { ServerRouter } from 'react-router'
 
@@ -32,7 +31,6 @@ export default function handleRequest(
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
     },
     ...(isDev && {
-      connectSrc: ['\'self\'', 'https://www.react-grab.com'],
       styleSrc: ['\'self\'', '\'unsafe-inline\'', 'https://fonts.googleapis.com'],
       fontSrc: ['\'self\'', 'https://fonts.gstatic.com'],
     }),
