@@ -32,9 +32,9 @@ export function Header({
         px-4 md:px-8 lg:px-12
         transition-all duration-300
         ${scrolled
-          ? 'bg-background/95 backdrop-blur-md shadow-sm'
-          : 'bg-background'
-        }
+      ? 'bg-background/95 backdrop-blur-md shadow-sm'
+      : 'bg-background'
+    }
       ` }
     >
       {/* Logo */ }
@@ -117,11 +117,11 @@ export function HeaderMenu({
               text-sm font-medium transition-colors hover:no-underline
               ${isMobile ? 'text-base' : ''}
               ${isActive
-                ? 'text-brand'
-                : isPending
-                  ? 'text-text4'
-                  : 'text-text2 hover:text-text'
-              }
+            ? 'text-brand'
+            : isPending
+              ? 'text-text4'
+              : 'text-text2 hover:text-text'
+          }
             ` }
           >
             { item.title }

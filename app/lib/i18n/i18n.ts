@@ -53,6 +53,7 @@ export const LOCALE_LABELS: Record<string, string> = {
 }
 
 const RE_LOCALE_PREFIX = /^[A-Z]{2}-[A-Z]{2}$/i
+const RE_DATA_SUFFIX = /\.data$/
 
 /**
  * 从 URL 首段解析 locale 前缀
@@ -64,7 +65,7 @@ function getFirstPathPart(url: URL): string | null {
     url.pathname
       .split('/')
       .at(1)
-      ?.replace(/\.data$/, '')
+      ?.replace(RE_DATA_SUFFIX, '')
       ?.toUpperCase() ?? null
   )
 }

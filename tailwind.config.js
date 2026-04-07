@@ -32,7 +32,6 @@ export default {
         warning: 'rgb(var(--warning) / <alpha-value>)',
         warningBg: 'rgb(var(--warningBg) / <alpha-value>)',
 
-        brand: 'rgb(var(--brand) / <alpha-value>)',
         navBg: 'rgb(var(--navBg) / <alpha-value>)',
 
         /** 按钮颜色 */

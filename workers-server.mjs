@@ -50,6 +50,7 @@ const executionContext = {
 
 // ─── Worker ──────────────────────────────────────────────────────────────────
 
+// eslint-disable-next-line antfu/no-top-level-await
 const { default: worker } = await import('./dist/server/index.js')
 
 // ─── Express App ─────────────────────────────────────────────────────────────

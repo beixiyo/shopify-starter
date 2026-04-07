@@ -82,7 +82,7 @@
 
 ```env
 # 你的 Shopify 店铺原生域名，用于 API 数据请求
-PUBLIC_STORE_DOMAIN="flowtica.myshopify.com" 
+PUBLIC_STORE_DOMAIN="flowtica.myshopify.com"
 
 # 这是极其关键的，当用户在你的网站点击"Checkout"时，程序要知道跳转到哪里
 PUBLIC_CHECKOUT_DOMAIN="checkout.flowtica.ai"

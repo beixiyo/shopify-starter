@@ -131,5 +131,6 @@ export default antfu({
     '**/*.jsonc',
     '**/*.json5',
     '**/*.d.ts',
+    '**/*.md',
   ],
 })

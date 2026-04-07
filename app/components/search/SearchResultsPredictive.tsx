@@ -108,23 +108,25 @@ function SearchResultsPredictiveArticles({
                 to={ articleUrl }
                 className="group flex items-center gap-3 py-2.5 transition-opacity hover:opacity-80"
               >
-                { article.image?.url ? (
-                  <div className="shrink-0 w-8 h-8 rounded-md overflow-hidden bg-background2">
-                    <Image
-                      alt={ article.image.altText ?? '' }
-                      src={ article.image.url }
-                      width={ 32 }
-                      height={ 32 }
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ) : (
-                  <div className="shrink-0 w-8 h-8 rounded-md bg-background2 flex items-center justify-center text-text4">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={ 1.5 } d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5L18.5 7H20a2 2 0 012 2v9a2 2 0 01-2 2z" />
-                    </svg>
-                  </div>
-                ) }
+                { article.image?.url
+                  ? (
+                      <div className="shrink-0 w-8 h-8 rounded-md overflow-hidden bg-background2">
+                        <Image
+                          alt={ article.image.altText ?? '' }
+                          src={ article.image.url }
+                          width={ 32 }
+                          height={ 32 }
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )
+                  : (
+                      <div className="shrink-0 w-8 h-8 rounded-md bg-background2 flex items-center justify-center text-text4">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={ 1.5 } d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5L18.5 7H20a2 2 0 012 2v9a2 2 0 01-2 2z" />
+                        </svg>
+                      </div>
+                    ) }
                 <div className="flex-1 min-w-0">
                   <span className="text-sm font-medium text-text truncate block">{ article.title }</span>
                 </div>
@@ -163,23 +165,25 @@ function SearchResultsPredictiveCollections({
                 to={ collectionUrl }
                 className="group flex items-center gap-3 py-2.5 transition-opacity hover:opacity-80"
               >
-                { collection.image?.url ? (
-                  <div className="shrink-0 w-8 h-8 rounded-md overflow-hidden bg-background2">
-                    <Image
-                      alt={ collection.image.altText ?? '' }
-                      src={ collection.image.url }
-                      width={ 32 }
-                      height={ 32 }
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ) : (
-                  <div className="shrink-0 w-8 h-8 rounded-md bg-background2 flex items-center justify-center text-text4">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={ 1.5 } d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                    </svg>
-                  </div>
-                ) }
+                { collection.image?.url
+                  ? (
+                      <div className="shrink-0 w-8 h-8 rounded-md overflow-hidden bg-background2">
+                        <Image
+                          alt={ collection.image.altText ?? '' }
+                          src={ collection.image.url }
+                          width={ 32 }
+                          height={ 32 }
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )
+                  : (
+                      <div className="shrink-0 w-8 h-8 rounded-md bg-background2 flex items-center justify-center text-text4">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={ 1.5 } d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                        </svg>
+                      </div>
+                    ) }
                 <div className="flex-1 min-w-0">
                   <span className="text-sm font-medium text-text truncate block">{ collection.title }</span>
                 </div>
@@ -259,23 +263,25 @@ function SearchResultsPredictiveProducts({
                 onClick={ closeSearch }
                 className="group flex items-center gap-3 py-2.5 transition-opacity hover:opacity-80"
               >
-                { image ? (
-                  <div className="shrink-0 w-10 h-10 rounded-md overflow-hidden bg-background2">
-                    <Image
-                      alt={ image.altText ?? '' }
-                      src={ image.url }
-                      width={ 40 }
-                      height={ 40 }
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ) : (
-                  <div className="shrink-0 w-10 h-10 rounded-md bg-background2 flex items-center justify-center text-text4">
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={ 1.5 } d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                    </svg>
-                  </div>
-                ) }
+                { image
+                  ? (
+                      <div className="shrink-0 w-10 h-10 rounded-md overflow-hidden bg-background2">
+                        <Image
+                          alt={ image.altText ?? '' }
+                          src={ image.url }
+                          width={ 40 }
+                          height={ 40 }
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )
+                  : (
+                      <div className="shrink-0 w-10 h-10 rounded-md bg-background2 flex items-center justify-center text-text4">
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={ 1.5 } d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                      </div>
+                    ) }
                 <div className="flex flex-col flex-1 min-w-0">
                   <span className="text-sm font-medium text-text truncate">{ product.title }</span>
                   <span className="text-xs text-text3 mt-0.5">{ price && <Money data={ price } /> }</span>

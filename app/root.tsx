@@ -2,6 +2,7 @@ import type { ShouldRevalidateFunction } from 'react-router'
 import type { Route } from './+types/root'
 import type { I18nLocale } from '~/lib/i18n'
 import { Analytics, getShopAnalytics, useNonce } from '@shopify/hydrogen'
+import { lazy } from 'react'
 import {
   isRouteErrorResponse,
   Links,
@@ -18,7 +19,6 @@ import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments'
 import { SUPPORTED_LOCALES } from '~/lib/i18n'
 import { PageLayout } from './components/layout/PageLayout'
 import baseStyles from './styles/css/index.css?url'
-import { lazy } from 'react'
 
 export type RootLoader = typeof loader
 

@@ -11,13 +11,15 @@ export const meta: Route.MetaFunction = ({ data }) => {
   return [{ title: `Hydrogen | ${data?.policy.title ?? ''}` }]
 }
 
+const RE_POLICY_NAME = /-([a-z])/g
+
 export async function loader({ params, context }: Route.LoaderArgs) {
   if (!params.handle) {
     throw new Response('No handle was passed in', { status: 404 })
   }
 
   const policyName = params.handle.replace(
-    /-([a-z])/g,
+    RE_POLICY_NAME,
     (_: unknown, m1: string) => m1.toUpperCase(),
   ) as SelectedPolicies
 

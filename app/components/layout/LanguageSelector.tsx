@@ -1,12 +1,13 @@
+import type { I18nLocale } from '~/lib/i18n/i18n'
 import { useRef, useState } from 'react'
 import { useLocation } from 'react-router'
-import { SUPPORTED_LOCALES, LOCALE_LABELS } from '~/lib/i18n/i18n'
-import type { I18nLocale } from '~/lib/i18n/i18n'
-import { useLocale } from '~/lib/i18n/useLocale'
 import { useLocaleMismatchHint } from '~/lib/i18n'
+import { LOCALE_LABELS, SUPPORTED_LOCALES } from '~/lib/i18n/i18n'
+import { useLocale } from '~/lib/i18n/useLocale'
 
 export function stripLocalePrefix(pathname: string, locale: I18nLocale): string {
-  if (!locale.pathPrefix) return pathname
+  if (!locale.pathPrefix)
+    return pathname
   if (pathname.startsWith(locale.pathPrefix)) {
     const stripped = pathname.slice(locale.pathPrefix.length)
     return stripped === '' ? '/' : stripped
@@ -40,16 +41,17 @@ export function LanguageSelector() {
       onMouseLeave={ handleLeave }
     >
       <button
-        className={`flex items-center gap-1 text-sm font-medium transition-colors cursor-pointer bg-transparent border-none p-0 rounded-full ${
-          showHint 
-            ? 'text-brand animate-pulse hover:text-brand' 
+        className={ `flex items-center gap-1 text-sm font-medium transition-colors cursor-pointer bg-transparent border-none p-0 rounded-full ${
+          showHint
+            ? 'text-brand animate-pulse hover:text-brand'
             : 'text-text2 hover:text-text'
-        }`}
+        }` }
         aria-expanded={ open }
         aria-label="Select language"
-        onClick={() => {
-          if (showHint) dismiss()
-        }}
+        onClick={ () => {
+          if (showHint)
+            dismiss()
+        } }
       >
         { currentLabel }
         <svg className="w-2.5 h-2.5 mt-0.5 opacity-70" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 10 6">
@@ -73,8 +75,8 @@ export function LanguageSelector() {
               className={ `
                 block px-3 py-1.5 text-sm transition-colors whitespace-nowrap
                 ${l.language === locale.language
-                  ? 'text-brand font-medium'
-                  : 'text-text2 hover:text-text hover:bg-background2/50'}
+              ? 'text-brand font-medium'
+              : 'text-text2 hover:text-text hover:bg-background2/50'}
               ` }
             >
               { l.label }
@@ -90,7 +92,7 @@ export function MobileLanguageSwitcher() {
   const locale = useLocale()
   const { pathname, search, hash } = useLocation()
   const { showHint, dismiss } = useLocaleMismatchHint()
-  
+
   return (
     <div className="flex flex-col gap-3 pt-6 mt-6 border-t border-border2/50">
       <span className="text-sm font-medium text-text4 uppercase tracking-wider flex items-center gap-2">
@@ -102,18 +104,19 @@ export function MobileLanguageSwitcher() {
       <div className="flex flex-wrap gap-2">
         {SUPPORTED_LOCALES.map(l => (
           <a
-            key={l.label}
-            href={`${l.pathPrefix}${stripLocalePrefix(pathname, locale)}${search}${hash}`}
-            onClick={() => {
-              if (showHint) dismiss()
-            }}
-            className={`
+            key={ l.label }
+            href={ `${l.pathPrefix}${stripLocalePrefix(pathname, locale)}${search}${hash}` }
+            onClick={ () => {
+              if (showHint)
+                dismiss()
+            } }
+            className={ `
               px-4 py-2 rounded-full text-sm transition-colors border
               ${l.language === locale.language
-                ? 'border-brand text-brand bg-brand/5 font-medium'
-                : 'border-border2 text-text2 hover:text-text hover:border-text'}
+            ? 'border-brand text-brand bg-brand/5 font-medium'
+            : 'border-border2 text-text2 hover:text-text hover:border-text'}
               ${showHint && l.language !== locale.language ? 'animate-pulse border-brand/50 text-brand' : ''}
-            `}
+            ` }
           >
             {LOCALE_LABELS[l.language] ?? l.label}
           </a>

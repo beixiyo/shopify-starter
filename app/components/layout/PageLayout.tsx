@@ -135,21 +135,23 @@ function SearchAside() {
                   />
                   { term.current && total
                     ? (
-                      <div className="pt-2 border-t border-border2/50">
-                        <Link
-                          onClick={ closeSearch }
-                          to={ `${SEARCH_ENDPOINT}?q=${term.current}` }
-                          className="group flex items-center justify-between py-2 text-text text-sm font-medium hover:opacity-80 transition-opacity"
-                        >
-                          <span>
-                            View all results for <q className="font-normal text-text3">{ term.current }</q>
-                          </span>
-                          <svg className="w-4 h-4 text-text4 group-hover:text-text transition-transform transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={ 2 } d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                          </svg>
-                        </Link>
-                      </div>
-                    )
+                        <div className="pt-2 border-t border-border2/50">
+                          <Link
+                            onClick={ closeSearch }
+                            to={ `${SEARCH_ENDPOINT}?q=${term.current}` }
+                            className="group flex items-center justify-between py-2 text-text text-sm font-medium hover:opacity-80 transition-opacity"
+                          >
+                            <span>
+                              View all results for
+                              {' '}
+                              <q className="font-normal text-text3">{ term.current }</q>
+                            </span>
+                            <svg className="w-4 h-4 text-text4 group-hover:text-text transition-transform transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={ 2 } d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                          </Link>
+                        </div>
+                      )
                     : null }
                 </div>
               )

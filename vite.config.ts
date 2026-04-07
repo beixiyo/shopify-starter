@@ -4,8 +4,8 @@ import { reactRouter } from '@react-router/dev/vite'
 import { hydrogen } from '@shopify/hydrogen/vite'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'vite'
-import tsconfigPaths from 'vite-tsconfig-paths'
 import svgr from 'vite-plugin-svgr'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 /**
  * EXPRESS_MODE=1 时构建 Express 自部署产物：
@@ -18,6 +18,7 @@ import svgr from 'vite-plugin-svgr'
  * 不受 react-dom/server alias 影响
  */
 const useExpressMode = process.env.EXPRESS_MODE === '1'
+const RE_ENTRY_SERVER = /entry\.server\.tsx?$/
 
 export default defineConfig({
   resolve: {
@@ -40,7 +41,7 @@ export default defineConfig({
           name: 'express-entry-server',
           enforce: 'pre' as const,
           resolveId(source: string) {
-            if (/entry\.server\.tsx?$/.test(source) && !source.includes('express')) {
+            if (RE_ENTRY_SERVER.test(source) && !source.includes('express')) {
               return fileURLToPath(new URL('./app/entry.server.express.tsx', import.meta.url))
             }
           },

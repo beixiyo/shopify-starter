@@ -8,7 +8,7 @@ type PartialSearchResult<ItemType extends keyof SearchItems> = Pick<
   SearchItems,
   ItemType
 >
-  & Pick<RegularSearchReturn, 'term'>
+& Pick<RegularSearchReturn, 'term'>
 
 type SearchResultsProps = RegularSearchReturn & {
   children: (args: SearchItems & { term: string }) => React.ReactNode
@@ -139,18 +139,20 @@ function SearchResultsProducts({
                 className="group flex flex-col"
               >
                 <div className="aspect-4/5 w-full overflow-hidden rounded-2xl bg-background2 mb-4">
-                  { image ? (
-                    <Image
-                      data={ image }
-                      alt={ product.title }
-                      sizes="(min-width: 768px) 25vw, 50vw"
-                      className="object-cover w-full h-full transition-transform duration-700 ease-out group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-text4">
-                      No image
-                    </div>
-                  ) }
+                  { image
+                    ? (
+                        <Image
+                          data={ image }
+                          alt={ product.title }
+                          sizes="(min-width: 768px) 25vw, 50vw"
+                          className="object-cover w-full h-full transition-transform duration-700 ease-out group-hover:scale-105"
+                        />
+                      )
+                    : (
+                        <div className="w-full h-full flex items-center justify-center text-text4">
+                          No image
+                        </div>
+                      ) }
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-sm font-medium text-text truncate">{ product.title }</span>

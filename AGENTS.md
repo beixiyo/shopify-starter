@@ -217,9 +217,9 @@ Tailwind mobile-first：无前缀 = 移动端，`md:` = 桌面端（≥768px）
 定义在 `~/components/layout/constants.ts`，布局相关数值统一引用：
 
 ```ts
-HEADER_HEIGHT = 64        // Header 高度
-HEADER_TOP_OFFSET = 16    // Header 顶部偏移
-HEADER_MAIN_OFFSET = 80   // Header 总占位（64 + 16）
+HEADER_HEIGHT = 64 // Header 高度
+HEADER_TOP_OFFSET = 16 // Header 顶部偏移
+HEADER_MAIN_OFFSET = 80 // Header 总占位（64 + 16）
 ```
 
 使用 `HEADER_THEME` 控制 Header 透明/实心主题切换：
@@ -256,9 +256,9 @@ const lp = useLocalePath()
 可通过 workspace 包名直接导入：
 
 ```tsx
-import { cn } from 'utils'
 import { ScrollReveal } from 'comps'
 import { IS_MOBILE_DEVICE } from 'config'
+import { cn } from 'utils'
 ```
 
 包定义见仓库根目录 `packages/*`。

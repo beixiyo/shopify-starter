@@ -16,6 +16,9 @@ export interface OrderFilterParams {
   confirmationNumber?: string
 }
 
+const RE_SANITIZE_VALUE = /[^a-zA-Z0-9_\-]/g
+const RE_HASH_PREFIX = /^#/
+
 /**
  * 清理筛选值以防止注入攻击或格式错误的查询。
  * 仅允许字母数字字符、下划线和破折号。
@@ -25,7 +28,7 @@ export interface OrderFilterParams {
 function sanitizeFilterValue(value: string): string {
   // 仅允许字母数字、下划线和破折号
   // 删除其他任何字符以防止注入
-  return value.replace(/[^a-zA-Z0-9_\-]/g, '')
+  return value.replace(RE_SANITIZE_VALUE, '')
 }
 
 /**
@@ -43,7 +46,7 @@ export function buildOrderSearchQuery(
 
   if (filters.name) {
     // 如果存在 # 则删除，并去除首尾空格
-    const cleanName = filters.name.replace(/^#/, '').trim()
+    const cleanName = filters.name.replace(RE_HASH_PREFIX, '').trim()
     const sanitizedName = sanitizeFilterValue(cleanName)
     if (sanitizedName) {
       queryParts.push(`name:${sanitizedName}`)

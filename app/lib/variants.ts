@@ -18,6 +18,8 @@ export function useVariantUrl(
   }, [handle, selectedOptions, pathname])
 }
 
+const RE_LOCALE_PATHNAME = /(\/[a-zA-Z]{2}-[a-zA-Z]{2}\/)/g
+
 export function getVariantUrl({
   handle,
   pathname,
@@ -29,7 +31,8 @@ export function getVariantUrl({
   searchParams: URLSearchParams
   selectedOptions?: SelectedOption[]
 }) {
-  const match = /(\/[a-zA-Z]{2}-[a-zA-Z]{2}\/)/g.exec(pathname)
+  RE_LOCALE_PATHNAME.lastIndex = 0
+  const match = RE_LOCALE_PATHNAME.exec(pathname)
   const isLocalePathname = match && match.length > 0
 
   const path = isLocalePathname

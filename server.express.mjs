@@ -18,6 +18,7 @@ import 'dotenv/config'
 // ─── Config ──────────────────────────────────────────────────────────────────
 
 const port = Number(process.env.PORT ?? 3000)
+// eslint-disable-next-line antfu/no-top-level-await
 const build = await import('./build/server/index.js')
 
 // ─── Express App ─────────────────────────────────────────────────────────────
@@ -49,6 +50,74 @@ app.all('/{*splat}', async (req, res, next) => {
     next(error)
   }
 })
+
+// ─── Cart Fragment（与 app/lib/fragments.ts 一致） ───────────────────────────
+
+const CART_QUERY_FRAGMENT = `#graphql
+  fragment Money on MoneyV2 { currencyCode amount }
+  fragment CartLine on CartLine {
+    id quantity
+    attributes { key value }
+    cost {
+      totalAmount { ...Money }
+      amountPerQuantity { ...Money }
+      compareAtAmountPerQuantity { ...Money }
+    }
+    merchandise {
+      ... on ProductVariant {
+        id availableForSale
+        compareAtPrice { ...Money }
+        price { ...Money }
+        requiresShipping title
+        image { id url altText width height }
+        product { handle title id vendor }
+        selectedOptions { name value }
+      }
+    }
+    parentRelationship { parent { id } }
+  }
+  fragment CartLineComponent on ComponentizableCartLine {
+    id quantity
+    attributes { key value }
+    cost {
+      totalAmount { ...Money }
+      amountPerQuantity { ...Money }
+      compareAtAmountPerQuantity { ...Money }
+    }
+    merchandise {
+      ... on ProductVariant {
+        id availableForSale
+        compareAtPrice { ...Money }
+        price { ...Money }
+        requiresShipping title
+        image { id url altText width height }
+        product { handle title id vendor }
+        selectedOptions { name value }
+      }
+    }
+    lineComponents { ...CartLine }
+  }
+  fragment CartApiQuery on Cart {
+    updatedAt id checkoutUrl totalQuantity note
+    appliedGiftCards { id lastCharacters amountUsed { ...Money } }
+    buyerIdentity {
+      countryCode email phone
+      customer { id email firstName lastName displayName }
+    }
+    lines(first: $numCartLines) {
+      nodes { ...CartLine }
+      nodes { ...CartLineComponent }
+    }
+    cost {
+      subtotalAmount { ...Money }
+      totalAmount { ...Money }
+      totalDutyAmount { ...Money }
+      totalTaxAmount { ...Money }
+    }
+    attributes { key value }
+    discountCodes { code applicable }
+  }
+`
 
 // ─── Hydrogen Context ────────────────────────────────────────────────────────
 
@@ -129,11 +198,14 @@ const SUPPORTED_LOCALES = [
   { language: 'JA', country: 'JP', pathPrefix: '/JA-JP', label: '日本語' },
 ]
 
+const RE_LOCALE_PREFIX = /^[A-Z]{2}-[A-Z]{2}$/i
+const RE_DATA_SUFFIX = /\.data$/
+
 function getLocaleFromRequest(request) {
   const url = new URL(request.url)
-  const firstPart = url.pathname.split('/').at(1)?.replace(/\.data$/, '')?.toUpperCase() ?? null
+  const firstPart = url.pathname.split('/').at(1)?.replace(RE_DATA_SUFFIX, '')?.toUpperCase() ?? null
 
-  if (!firstPart || !/^[A-Z]{2}-[A-Z]{2}$/i.test(firstPart))
+  if (!firstPart || !RE_LOCALE_PREFIX.test(firstPart))
     return DEFAULT_LOCALE
 
   const pathPrefix = `/${firstPart}`
@@ -144,74 +216,6 @@ function getLocaleFromRequest(request) {
   const [language, country] = firstPart.split('-')
   return { language, country, pathPrefix, label: `${language}-${country}` }
 }
-
-// ─── Cart Fragment（与 app/lib/fragments.ts 一致） ───────────────────────────
-
-const CART_QUERY_FRAGMENT = `#graphql
-  fragment Money on MoneyV2 { currencyCode amount }
-  fragment CartLine on CartLine {
-    id quantity
-    attributes { key value }
-    cost {
-      totalAmount { ...Money }
-      amountPerQuantity { ...Money }
-      compareAtAmountPerQuantity { ...Money }
-    }
-    merchandise {
-      ... on ProductVariant {
-        id availableForSale
-        compareAtPrice { ...Money }
-        price { ...Money }
-        requiresShipping title
-        image { id url altText width height }
-        product { handle title id vendor }
-        selectedOptions { name value }
-      }
-    }
-    parentRelationship { parent { id } }
-  }
-  fragment CartLineComponent on ComponentizableCartLine {
-    id quantity
-    attributes { key value }
-    cost {
-      totalAmount { ...Money }
-      amountPerQuantity { ...Money }
-      compareAtAmountPerQuantity { ...Money }
-    }
-    merchandise {
-      ... on ProductVariant {
-        id availableForSale
-        compareAtPrice { ...Money }
-        price { ...Money }
-        requiresShipping title
-        image { id url altText width height }
-        product { handle title id vendor }
-        selectedOptions { name value }
-      }
-    }
-    lineComponents { ...CartLine }
-  }
-  fragment CartApiQuery on Cart {
-    updatedAt id checkoutUrl totalQuantity note
-    appliedGiftCards { id lastCharacters amountUsed { ...Money } }
-    buyerIdentity {
-      countryCode email phone
-      customer { id email firstName lastName displayName }
-    }
-    lines(first: $numCartLines) {
-      nodes { ...CartLine }
-      nodes { ...CartLineComponent }
-    }
-    cost {
-      subtotalAmount { ...Money }
-      totalAmount { ...Money }
-      totalDutyAmount { ...Money }
-      totalTaxAmount { ...Money }
-    }
-    attributes { key value }
-    discountCodes { code applicable }
-  }
-`
 
 // ─── Start ───────────────────────────────────────────────────────────────────
 
