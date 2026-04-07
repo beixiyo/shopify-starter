@@ -4,7 +4,7 @@ import { Form } from 'react-router'
 
 type SearchFormProps = Omit<FormProps, 'children'> & {
   children: (args: {
-    inputRef: React.RefObject<HTMLInputElement>
+    inputRef: React.RefObject<HTMLInputElement | null>
   }) => React.ReactNode
 }
 
@@ -28,7 +28,7 @@ type SearchFormProps = Omit<FormProps, 'children'> & {
  *  </SearchForm>
  */
 export function SearchForm({ children, ...props }: SearchFormProps) {
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
   useFocusOnCmdK(inputRef)
 
@@ -38,7 +38,7 @@ export function SearchForm({ children, ...props }: SearchFormProps) {
 
   return (
     <Form method="get" { ...props }>
-      {children({ inputRef })}
+      { children({ inputRef }) }
     </Form>
   )
 }
@@ -46,7 +46,7 @@ export function SearchForm({ children, ...props }: SearchFormProps) {
 /**
  * 在按下 cmd+k 时将焦点设置到输入框
  */
-function useFocusOnCmdK(inputRef: React.RefObject<HTMLInputElement>) {
+function useFocusOnCmdK(inputRef: React.RefObject<HTMLInputElement | null>) {
   // 当按下 cmd+k 时将焦点设置到输入框
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
