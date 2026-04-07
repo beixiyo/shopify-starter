@@ -45,6 +45,13 @@ export const SUPPORTED_LOCALES: I18nLocale[] = [
   { language: 'JA', country: 'JP', pathPrefix: '/JA-JP', label: '日本語' },
 ]
 
+export const LOCALE_LABELS: Record<string, string> = {
+  EN: 'EN',
+  JA: 'JP',
+  ZH: 'CN',
+  FR: 'FR',
+}
+
 const RE_LOCALE_PREFIX = /^[A-Z]{2}-[A-Z]{2}$/i
 
 /**

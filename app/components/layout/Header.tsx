@@ -7,6 +7,7 @@ import {
 import { Suspense, useEffect, useState } from 'react'
 import { Await, NavLink, useAsyncValue } from 'react-router'
 import { useAside } from '~/components/layout/Aside'
+import { LanguageSelector, MobileLanguageSwitcher } from '~/components/layout/LanguageSelector'
 
 export function Header({
   header,
@@ -31,22 +32,22 @@ export function Header({
         px-4 md:px-8 lg:px-12
         transition-all duration-300
         ${scrolled
-      ? 'bg-background/95 backdrop-blur-md shadow-sm'
-      : 'bg-background'
-    }
+          ? 'bg-background/95 backdrop-blur-md shadow-sm'
+          : 'bg-background'
+        }
       ` }
     >
-      {/* Logo */}
+      {/* Logo */ }
       <NavLink
         prefetch="intent"
         to="/"
         className="text-lg font-semibold tracking-tight text-text hover:no-underline shrink-0"
         end
       >
-        {shop.name}
+        { shop.name }
       </NavLink>
 
-      {/* Desktop Nav */}
+      {/* Desktop Nav */ }
       <HeaderMenu
         menu={ menu }
         viewport="desktop"
@@ -54,7 +55,7 @@ export function Header({
         publicStoreDomain={ publicStoreDomain }
       />
 
-      {/* CTAs */}
+      {/* CTAs */ }
       <HeaderCtas isLoggedIn={ isLoggedIn } cart={ cart } />
     </header>
   )
@@ -83,7 +84,7 @@ export function HeaderMenu({
       }
       role="navigation"
     >
-      {isMobile && (
+      { isMobile && (
         <NavLink
           end
           onClick={ close }
@@ -93,8 +94,8 @@ export function HeaderMenu({
         >
           Home
         </NavLink>
-      )}
-      {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
+      ) }
+      { (menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url)
           return null
 
@@ -116,17 +117,19 @@ export function HeaderMenu({
               text-sm font-medium transition-colors hover:no-underline
               ${isMobile ? 'text-base' : ''}
               ${isActive
-            ? 'text-brand'
-            : isPending
-              ? 'text-text4'
-              : 'text-text2 hover:text-text'
-          }
+                ? 'text-brand'
+                : isPending
+                  ? 'text-text4'
+                  : 'text-text2 hover:text-text'
+              }
             ` }
           >
-            {item.title}
+            { item.title }
           </NavLink>
         )
-      })}
+      }) }
+
+      { isMobile && <MobileLanguageSwitcher /> }
     </nav>
   )
 }
@@ -138,6 +141,7 @@ function HeaderCtas({
   return (
     <nav className="flex items-center gap-4 ml-auto" role="navigation">
       <HeaderMenuMobileToggle />
+      <LanguageSelector />
       <NavLink
         prefetch="intent"
         to="/account"
@@ -145,7 +149,7 @@ function HeaderCtas({
       >
         <Suspense fallback="Sign in">
           <Await resolve={ isLoggedIn } errorElement="Sign in">
-            {isLoggedIn => (isLoggedIn ? 'Account' : 'Sign in')}
+            { isLoggedIn => (isLoggedIn ? 'Account' : 'Sign in') }
           </Await>
         </Suspense>
       </NavLink>
@@ -159,7 +163,7 @@ function HeaderMenuMobileToggle() {
   const { open } = useAside()
   return (
     <button
-      className="md:hidden p-2 -ml-2 text-text3 hover:text-text transition-colors"
+      className="md:hidden -ml-2 text-text3 hover:text-text transition-colors"
       onClick={ () => open('mobile') }
       aria-label="Open menu"
     >
@@ -174,7 +178,7 @@ function SearchToggle() {
   const { open } = useAside()
   return (
     <button
-      className="p-2 text-text3 hover:text-text transition-colors"
+      className="text-text3 hover:text-text transition-colors"
       onClick={ () => open('search') }
       aria-label="Search"
     >
@@ -193,7 +197,7 @@ function CartBadge({ count }: { count: number }) {
   return (
     <a
       href="/cart"
-      className="relative p-2 text-text3 hover:text-text transition-colors"
+      className="relative text-text3 hover:text-text transition-colors"
       onClick={ (e) => {
         e.preventDefault()
         open('cart')
@@ -210,11 +214,11 @@ function CartBadge({ count }: { count: number }) {
         <path d="M3 6h18" />
         <path d="M16 10a4 4 0 0 1-8 0" />
       </svg>
-      {count > 0 && (
+      { count > 0 && (
         <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center w-4 h-4 text-[10px] font-semibold text-textSpecial bg-button rounded-full">
-          {count}
+          { count }
         </span>
-      )}
+      ) }
     </a>
   )
 }

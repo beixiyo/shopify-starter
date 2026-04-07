@@ -51,6 +51,34 @@ export default {
         /** 骨架屏颜色（用于直接在 Tailwind 中使用） */
         skeletonBase: 'rgb(var(--skeleton-base) / <alpha-value>)',
         skeletonHighlight: 'rgb(var(--skeleton-highlight) / <alpha-value>)',
+
+        /** 品牌紫色 */
+        brand: '#5C54B7',
+      },
+
+      /** 排版 token — 全站统一标题/正文尺寸 */
+      fontSize: {
+        /** 页面大标题 (Hero / 全宽 banner) */
+        'heading-hero': ['56px', { lineHeight: '1.1' }],
+        /** Section 标题 — 大 (TechSpec, FAQ, WhatsInBox 等) */
+        'heading-xl': ['48px', { lineHeight: '1.2' }],
+        /** Section 标题 — 标准 (大部分 section h2) */
+        'heading-lg': ['36px', { lineHeight: '1.3' }],
+        /** Section 标题 — 小 (卡片上方、辅助标题) */
+        'heading-md': ['30px', { lineHeight: '1.3' }],
+        /** 子标题 / 卡片标题 (h3) */
+        'heading-sm': ['24px', { lineHeight: '1.35' }],
+
+        /** 正文 — 大 */
+        'body-lg': ['22px', { lineHeight: '1.6' }],
+        /** 正文 — 标准 */
+        'body-md': ['18px', { lineHeight: '1.5' }],
+        /** 正文 — 小 */
+        'body-sm': ['16px', { lineHeight: '1.6' }],
+        /** 正文 — 更小 */
+        'body-xs': ['14px', { lineHeight: '1.6' }],
+        /** 辅助文字 (标签、徽章、脚注) */
+        'caption': ['12px', { lineHeight: '1.5' }],
       },
 
       /** 动画 */

@@ -5,6 +5,7 @@ import { hydrogen } from '@shopify/hydrogen/vite'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
+import svgr from 'vite-plugin-svgr'
 
 /**
  * EXPRESS_MODE=1 时构建 Express 自部署产物：
@@ -26,6 +27,7 @@ export default defineConfig({
   },
   plugins: [
     tailwindcss(),
+    svgr(),
     hydrogen(),
     ...(
       useExpressMode

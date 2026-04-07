@@ -14,6 +14,7 @@ import {
   SearchFormPredictive,
 } from '~/components/search/SearchFormPredictive'
 import { SearchResultsPredictive } from '~/components/search/SearchResultsPredictive'
+import { LocaleMismatchHintProvider } from '~/lib/i18n'
 
 export function PageLayout({
   cart,
@@ -24,25 +25,27 @@ export function PageLayout({
   publicStoreDomain,
 }: PageLayoutProps) {
   return (
-    <Aside.Provider>
-      <CartAside cart={ cart } />
-      <SearchAside />
-      <MobileMenuAside header={ header } publicStoreDomain={ publicStoreDomain } />
-      { header && (
-        <Header
+    <LocaleMismatchHintProvider>
+      <Aside.Provider>
+        <CartAside cart={ cart } />
+        <SearchAside />
+        <MobileMenuAside header={ header } publicStoreDomain={ publicStoreDomain } />
+        { header && (
+          <Header
+            header={ header }
+            cart={ cart }
+            isLoggedIn={ isLoggedIn }
+            publicStoreDomain={ publicStoreDomain }
+          />
+        ) }
+        <main className="pt-16 flex-1">{ children }</main>
+        <Footer
+          footer={ footer }
           header={ header }
-          cart={ cart }
-          isLoggedIn={ isLoggedIn }
           publicStoreDomain={ publicStoreDomain }
         />
-      ) }
-      <main className="pt-16 flex-1">{ children }</main>
-      <Footer
-        footer={ footer }
-        header={ header }
-        publicStoreDomain={ publicStoreDomain }
-      />
-    </Aside.Provider>
+      </Aside.Provider>
+    </LocaleMismatchHintProvider>
   )
 }
 

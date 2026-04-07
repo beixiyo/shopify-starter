@@ -10,7 +10,6 @@ import { SearchForm } from '~/components/search/SearchForm'
 import { SearchResults } from '~/components/search/SearchResults'
 import {
   getEmptyPredictiveSearchResult,
-
 } from '~/lib/search'
 
 export const meta: Route.MetaFunction = () => {
@@ -61,9 +60,9 @@ export default function SearchPage() {
                 placeholder="Search products, articles, and pages…"
                 ref={ inputRef }
                 type="search"
-                className="w-full h-14 pl-12 pr-24 bg-background2/50 border border-border2 rounded-2xl text-lg text-text placeholder:text-text4 focus:outline-none focus:ring-2 focus:ring-text focus:border-transparent transition-all duration-300"
+                className="w-full h-14 pl-12 pr-24 bg-background2/50 border border-border rounded-2xl text-lg text-text focus:border-border2 placeholder:text-text4 transition-all duration-300"
               />
-              <button 
+              <button
                 type="submit"
                 className="absolute right-2 px-4 py-2 bg-text text-background rounded-xl text-sm font-medium hover:opacity-80 transition-opacity"
               >
