@@ -267,7 +267,7 @@ import { Pagination } from '@shopify/hydrogen'
 
 ## 7. 调试技巧
 
-- **GraphQL Explorer**：Shopify Admin → Settings → Apps → 选择你的 app → API Explorer
+- **本地 GraphiQL**：`pnpm dev` 启动后访问 `http://localhost:3000/graphiql`，直接查 Storefront API（见下方「数据验证」）
 - **查看生成的类型**：`storefrontapi.generated.d.ts` 文件
 - **Storefront API 文档**：https://shopify.dev/docs/api/storefront
 - **VS Code 插件**：安装 GraphQL 插件，配合 `.graphqlrc.ts` 获得自动补全
@@ -291,6 +291,68 @@ Storefront API 使用 GID 格式的 ID（如 `gid://shopify/ProductVariant/47216
 
 ---
 
-## 8. 下一步
+## 8. 数据验证
+
+开发时需要确认「后台数据 → API → 前端渲染」三层一致。核心工具是 **Hydrogen 本地 GraphiQL**：`http://localhost:3000/graphiql`（仅开发环境可用）
+
+### 三层真相源
+
+| 层 | 入口 | 用途 |
+|----|------|------|
+| Shopify 后台 | `admin.shopify.com/store/flowtica` | 数据写入源 |
+| Storefront API | 本地 GraphiQL | 验证 API 实际返回什么 |
+| 前端页面 | `localhost:3000/products/<handle>` | 验证渲染是否正确 |
+
+**排错思路**：GraphiQL 返回对但前端错 → 前端问题；GraphiQL 返回就错 → 后台数据或查询问题
+
+### 后台字段 ↔ API 字段映射
+
+| API 字段 | 后台位置 |
+|----------|----------|
+| `title` | 商品详情页 **Title** |
+| `vendor` | 右栏 **Product organization → Vendor** |
+| `descriptionHtml` | **Description** 富文本 |
+| `handle` | 底部 **Search engine listing → URL handle**（点铅笔图标展开） |
+| `options[]` | **Variants → Options** |
+| `variants[].price` / `compareAtPrice` | variant 的 **Price** / **Compare-at price** |
+| `variants[].sku` | variant 的 **Inventory → SKU** |
+| `variants[].availableForSale` | 由 **Inventory quantity + Track quantity + Continue selling when out of stock** 综合决定 |
+| `media[]` | 商品详情页 **Media** 区图片/视频顺序 |
+
+权威字段定义：https://shopify.dev/docs/api/storefront/latest/objects/Product
+
+### 常用验证查询
+
+在本地 GraphiQL 粘贴（替换 handle 即可）：
+
+```graphql
+{
+  product(handle: "flowtica-scribe") {
+    title vendor descriptionHtml handle
+    options { name optionValues { name } }
+    variants(first: 50) {
+      nodes {
+        id title sku availableForSale
+        price { amount currencyCode }
+        compareAtPrice { amount currencyCode }
+        selectedOptions { name value }
+      }
+    }
+    media(first: 20) { nodes { __typename } }
+  }
+}
+```
+
+后台改字段 → Storefront API 有 CDN 缓存（秒级到几分钟生效）→ 刷新 GraphiQL 确认 → 再刷新前端页面
+
+### variant 切换验证
+
+1. 前端切换 Color/Size → URL 应带 `?Color=Red&Size=M`（由 `useSelectedOptionInUrlParam` 写入）
+2. 直接访问带参数的 URL 应高亮对应选项并显示对应价格
+3. 后台清空某 variant 库存且关闭超卖 → 该选项应变灰/不可选
+
+---
+
+## 9. 下一步
 
 了解了 GraphQL 查询后，进入 [06-context-session-i18n.md](./06-context-session-i18n.md) 深入 Hydrogen Context
