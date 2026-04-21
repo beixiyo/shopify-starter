@@ -1,6 +1,6 @@
 # 翻译与多语言内容管理
 
-Hydrogen 的国际化分两层：**路由 + API 上下文**（代码层，已完成）和**翻译内容**（运营层，本文档）。代码层 + 踩坑清单见 [12-i18n.md](./12-i18n.md)
+Hydrogen 的国际化分两层：**路由 + API 上下文**（代码层，已完成）和**翻译内容**（运营层，本文档）。代码层 + 踩坑清单见 [i18n.md](./i18n.md)
 
 ## 1. 前置条件
 
@@ -139,7 +139,7 @@ Translate & Adapt 内置 Shopify AI 翻译：
 **Q: 购物车里商品名是英文，但结账页是日语？**
 - 已知 Shopify bug：cart mutation 返回数据不遵守 `@inContext` 的 language 参数
 - `checkoutUrl` 本身的语言绑定不受影响
-- 见 [12-i18n.md](./12-i18n.md) 的「Storefront API 的已知行为差异」一节
+- 见 [i18n.md](./i18n.md) 的「Storefront API 的已知行为差异」一节
 
 **Q: URL handle 需要翻译吗？**
 - 通常**不翻译**，保持英文。日语 URL 对 SEO 无优势且容易编码出错

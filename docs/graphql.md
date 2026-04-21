@@ -355,4 +355,4 @@ Storefront API 使用 GID 格式的 ID（如 `gid://shopify/ProductVariant/47216
 
 ## 9. 下一步
 
-了解了 GraphQL 查询后，进入 [06-context-session.md](./06-context-session.md) 深入 Hydrogen Context
+了解了 GraphQL 查询后，进入 [context-session.md](./context-session.md) 深入 Hydrogen Context

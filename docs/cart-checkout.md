@@ -265,4 +265,4 @@ CartForm 支持折扣码和礼品卡操作：
 
 ## 8. 下一步
 
-进入 [08-components.md](./08-components.md) 了解 Hydrogen 内置组件和自定义组件模式
+进入 [components.md](./components.md) 了解 Hydrogen 内置组件和自定义组件模式

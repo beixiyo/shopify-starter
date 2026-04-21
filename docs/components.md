@@ -71,7 +71,7 @@ import { CartForm } from '@shopify/hydrogen'
 </CartForm>
 ```
 
-详见 [07-cart-checkout.md](./07-cart-checkout.md)
+详见 [cart-checkout.md](./cart-checkout.md)
 
 ### `<Analytics.Provider>` — 分析追踪
 
@@ -317,4 +317,4 @@ export default function AccountLayout() {
 
 ## 5. 下一步
 
-进入 [09-dev-workflow.md](./09-dev-workflow.md) 了解开发工作流和部署
+进入 [dev-workflow.md](./dev-workflow.md) 了解开发工作流和部署

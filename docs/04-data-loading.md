@@ -268,4 +268,4 @@ export default function Product() {
 
 ## 7. 下一步
 
-了解了数据加载后，进入 [05-graphql.md](./05-graphql.md) 深入 GraphQL 查询写法
+了解了数据加载后，进入 [graphql.md](./graphql.md) 深入 GraphQL 查询写法

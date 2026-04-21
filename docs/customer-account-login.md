@@ -81,7 +81,7 @@ Hydrogen 通过它访问登录后的客户数据，例如：
 
 ### 5. OAuth 回调
 
-登录完成后，Shopify 需要跳回你的前端站点
+登录完成后，Shopify 需要跳回你的前端站点。  
 这个跳回地址必须提前加入白名单，否则会报错
 
 在 Hydrogen 里，这个回调通常是：
@@ -295,7 +295,7 @@ pnpm env:pull
 http://localhost:3000/account/signin
 ```
 
-页面本身通常能打开，因为这是你自己的前端页面
+页面本身通常能打开，因为这是你自己的前端页面。  
 但点击 `Continue` 发起 Customer Account OAuth 时，Hydrogen 会提示：
 
 ```text
@@ -404,7 +404,7 @@ pnpm exec shopify hydrogen dev --codegen --customer-account-push
 Unexpected argument: --customer-account-push
 ```
 
-说明你把参数传给了 `pnpm dev` 脚本而不是 Shopify CLI
+说明你把参数传给了 `pnpm dev` 脚本而不是 Shopify CLI。  
 直接执行上面的完整命令，不要用：
 
 ```bash
@@ -523,8 +523,8 @@ https://www.example.com
 示例：
 
 ```tsx
-import { useState } from 'react'
 import { useNavigate } from 'react-router'
+import { useState } from 'react'
 
 export default function SignInPage() {
   const [email, setEmail] = useState('')

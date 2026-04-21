@@ -1,4 +1,13 @@
-# 部署与域名切换指南 (Deployment & Domain Switch Guide)
+# 部署与域名切换指南（Cloudflare / 自部署，备用路径）
+
+> ⚠️ **首选部署路径已切换到 Shopify Oxygen**，见 [deploy-oxygen.md](./deploy-oxygen.md)
+>
+> 本文档保留作为**备用路径**，覆盖 Cloudflare Pages/Workers 或 Express 自部署的场景。适用于：
+> - 需要把前端托管在 Shopify 体系外（合规、可控性要求）
+> - 多 CDN 或边缘策略定制
+> - Hydrogen channel 不可用的店铺套餐
+>
+> 历史说明：2026 年 4 月前团队一度认为 Oxygen 需 Shopify Plus ($2000/月)，遂选 Cloudflare 自部署。实际 Basic 套餐 ($39/月) 即可用 Oxygen，Hydrogen channel 本身免费
 
 本文档说明在使用 Cloudflare (或任何非 Shopify 官方托管) 部署 Hydrogen Headless 站点时，如何进行完整的测试，以及如何下架旧版的 Shopify Theme 并将正式域名切换到新版 Headless 站点
 
@@ -82,7 +91,7 @@
 
 ```env
 # 你的 Shopify 店铺原生域名，用于 API 数据请求
-PUBLIC_STORE_DOMAIN="flowtica.myshopify.com"
+PUBLIC_STORE_DOMAIN="flowtica.myshopify.com" 
 
 # 这是极其关键的，当用户在你的网站点击"Checkout"时，程序要知道跳转到哪里
 PUBLIC_CHECKOUT_DOMAIN="checkout.flowtica.ai"

@@ -1,6 +1,6 @@
 # 测试订单与支付验证
 
-在不花真钱的前提下验证完整购买流程。本店使用 Shopify Payments，通过其内置 **Test Mode** 进行测试
+在不花真钱的前提下验证完整购买流程。本店使用 Shopify Payments，通过其内置 **Test Mode** 进行测试。
 
 > ⚠️ **开启 Test Mode 期间，所有渠道（老站 + 新站）的真实信用卡交易都会失败。务必选低流量时段操作，测完立即关闭。**
 
@@ -9,7 +9,7 @@
 1. 后台 → **Settings → Payments** → Shopify Payments 区域 → **Manage**
 2. 拉到底部 → 勾选 **Enable test mode** → **Save**
 
-需要 **Store owner** 或有 Payments 权限的账号才能操作
+需要 **Store owner** 或有 Payments 权限的账号才能操作。
 
 ## 2. 测试卡号
 
@@ -19,7 +19,7 @@
 | 支付被拒 | `4000 0000 0000 0002` | 任意三位 | 任意未来日期 |
 | 3D Secure 验证 | `4000 0000 0000 3220` | 任意三位 | 任意未来日期 |
 
-持卡人姓名随意填写
+持卡人姓名随意填写。
 
 完整测试卡号列表：[Shopify 官方文档 · Testing Shopify Payments](https://help.shopify.com/en/manual/payments/shopify-payments/testing-shopify-payments)
 
@@ -79,7 +79,7 @@
 | **Channel** | 区分老站（`Online Store`）vs 新站（Hydrogen 渠道名） |
 | **Market** | 区分美国订单 vs 日本订单 |
 
-点列表上方的 **筛选图标（漏斗）** → 选 Channel 或 Market → 即可分开查看。截图给市场部证明"订单不会混"
+点列表上方的 **筛选图标（漏斗）** → 选 Channel 或 Market → 即可分开查看。截图给市场部证明"订单不会混"。
 
 ## 6. 常见问题
 

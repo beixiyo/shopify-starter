@@ -1,4 +1,7 @@
-# Context、Session 与国际化
+# Context 与 Session
+
+> 本文只讲 Hydrogen Context（依赖注入中心）和 Session（基于 Cookie 的会话）。
+> 国际化（i18n、多语言、翻译陷阱、variant 匹配、market 配置）全部迁到 [i18n.md](./i18n.md)。
 
 ## 1. Hydrogen Context — 依赖注入中心
 
@@ -122,114 +125,7 @@ export async function action({ context, request }: Route.ActionArgs) {
 
 ---
 
-## 3. 国际化（i18n）
-
-### 3.1 URL 结构
-
-Hydrogen 通过 URL 前缀区分 locale：
-
-```
-/products/t-shirt           → 默认（EN-US）
-/en-US/products/t-shirt     → English (United States)
-/zh-CN/products/t-shirt     → 中文（中国）
-/ja-JP/products/t-shirt     → 日本語（日本）
-/fr-FR/products/t-shirt     → Français (France)
-```
-
-### 3.2 解析逻辑
-
-`app/lib/i18n.ts`：
-
-```tsx
-export interface I18nLocale extends I18nBase {
-  pathPrefix: string // '' 或 '/en-US'
-}
-
-export function getLocaleFromRequest(request: Request): I18nLocale {
-  const url = new URL(request.url)
-  const firstPathPart = url.pathname.split('/')[1]?.toUpperCase() ?? ''
-
-  let pathPrefix = ''
-  let [language, country] = ['EN', 'US'] // 默认值
-
-  // 匹配 XX-YY 格式
-  if (/^[A-Z]{2}-[A-Z]{2}$/i.test(firstPathPart)) {
-    pathPrefix = `/${firstPathPart}`
-    ;[language, country] = firstPathPart.split('-')
-  }
-
-  return { language, country, pathPrefix }
-}
-```
-
-### 3.3 如何生效？
-
-解析出的 locale 在三个地方发挥作用：
-
-**1. GraphQL 查询自动注入 `@inContext`**
-
-```graphql
-query Product($country: CountryCode, $language: LanguageCode)
-  @inContext(country: $country, language: $language) {
-  product(handle: "t-shirt") {
-    title          # 返回对应语言的标题
-    priceRange {
-      minVariantPrice {
-        amount       # 返回对应国家的货币和价格
-        currencyCode
-      }
-    }
-  }
-}
-```
-
-`$country` 和 `$language` 由 `context.storefront.i18n` 自动传入，你不需要手动传递
-
-**2. locale 路由校验**
-
-```tsx
-// app/routes/($locale).tsx
-export async function loader({ params, context }) {
-  const { language, country } = context.storefront.i18n
-  // 如果 URL 中的 locale 与 storefront 的不匹配 → 404
-  if (params.locale
-    && params.locale.toLowerCase() !== `${language}-${country}`.toLowerCase()) {
-    throw new Response(null, { status: 404 })
-  }
-  return null
-}
-```
-
-**3. 链接前缀**
-
-生成内部链接时需要加上 locale 前缀：
-
-```tsx
-// 产品变体 URL 需要考虑 locale 前缀
-function getVariantUrl({ handle, pathname, selectedOptions }) {
-  const match = /(\/[a-zA-Z]{2}-[a-zA-Z]{2}\/)/.exec(pathname)
-  const isLocale = match && match.length > 0
-  const path = isLocale
-    ? `${match[0]}products/${handle}`
-    : `/products/${handle}`
-  return path
-}
-```
-
-### 3.4 扩展 i18n
-
-当前的 i18n 实现是最简模式（URL 前缀）。你可以改造为：
-
-- **Cookie-based**：从 Cookie 读取用户偏好
-- **Header-based**：从 `Accept-Language` 推断
-- **Subdomain-based**：`us.myshop.com` / `jp.myshop.com`
-- **混合模式**：URL 前缀 + Cookie 记住偏好
-
-只需修改 `getLocaleFromRequest()` 函数即可
-
----
-
-## 4. Cookie Consent（隐私合规）
+## 3. Cookie Consent（隐私合规）
 
 `root.tsx` 的 loader 返回 consent 配置：
 
@@ -247,7 +143,7 @@ Hydrogen 的 `<Analytics.Provider>` 会根据 consent 配置自动处理 cookie 
 
 ---
 
-## 5. Content Security Policy（CSP）
+## 4. Content Security Policy（CSP）
 
 `entry.server.tsx` 中创建 CSP：
 
@@ -268,6 +164,7 @@ const { nonce, header, NonceProvider } = createContentSecurityPolicy({
 
 ---
 
-## 6. 下一步
+## 5. 下一步
 
-进入 [07-cart-checkout.md](./07-cart-checkout.md) 了解购物车和结账的实现
+- 购物车与结账流程 → [cart-checkout.md](./cart-checkout.md)
+- 多语言、变体匹配与翻译陷阱 → [i18n.md](./i18n.md)

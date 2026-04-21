@@ -163,7 +163,7 @@
 - 结账页价格 ✅
 - 订单确认邮件价格 ✅
 
-测试订单的做法见开发文档 [14-test-orders.md](./14-test-orders.md)
+测试订单的做法见开发文档 [test-orders.md](./test-orders.md)
 
 ---
 
