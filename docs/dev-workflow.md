@@ -264,7 +264,48 @@ Oxygen 是 Shopify 的边缘计算平台（基于 Cloudflare Workers），与 Sh
 
 ---
 
-## 8. 开发技巧
+## 8. 多 Store 本地开发
+
+如果有两个 Shopify store：
+
+| Store | 域名 | 本地子域名 | 状态 |
+|-------|------|-----------|------|
+| EN（主力） | `flowtica.myshopify.com` | `localhost:3000` | 商品/页面齐全 |
+| JP（日本） | `hu0dn1-5x.myshopify.com` | `jp.localhost:3000` | 空库（上线前运营填充） |
+
+本地只有一份 `.env`，两个子域名查同一 store。
+
+### 8.1 切换到 EN store（测试完整功能）
+
+```bash
+cd frontend/shopify
+pnpm shopify hydrogen link   # 交互式选 EN store（flowtica.myshopify.com）
+pnpm shopify hydrogen env:pull
+pnpm dev
+```
+
+切换后 `localhost:3000` 和 `jp.localhost:3000` 均查 EN 数据，语言/货币仍按子域名区分。
+
+### 8.2 切换回 JP store
+
+```bash
+pnpm shopify hydrogen link   # 选 JP store（hu0dn1-5x.myshopify.com）
+pnpm shopify hydrogen env:pull
+pnpm dev
+```
+
+### 8.3 同步单个商品从 EN → JP（本地测试用）
+
+JP store 为空时产品页会 404，不想切换整个 env 可以只同步需要的商品：
+
+1. [EN store admin → Products](https://flowtica.myshopify.com/admin/products) → 搜索目标商品 → 勾选 → 右上角 **Export** → *Selected: N products* → *CSV for Excel* → 下载
+2. [JP store admin → Products](https://hu0dn1-5x.myshopify.com/admin/products) → 右上角 **Import** → 上传 CSV → **Upload and preview** → **Import products**
+
+完成后无需改 `.env` 或重启 server，`jp.localhost:3000/products/<handle>` 即可访问。
+
+---
+
+## 9. 开发技巧
 
 ### Mock Shop
 
