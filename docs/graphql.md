@@ -273,21 +273,21 @@ import { Pagination } from '@shopify/hydrogen'
 - **VS Code 插件**：安装 GraphQL 插件，配合 `.graphqlrc.ts` 获得自动补全
 - **loader 调试**：在 loader 中 `console.log()` 输出会出现在**终端**（运行 `pnpm dev` 的窗口），不在浏览器 DevTools
 
-### 在 Shopify 后台查找 Product / Variant ID
+### 产品查询方式：Handle 优先，避免 GID
 
-Storefront API 使用 GID 格式的 ID（如 `gid://shopify/ProductVariant/47216813670656`），后台 URL 中的数字部分就是 GID 的末尾数字：
+Storefront API 支持两种查询产品的方式：
 
-1. 登录 `admin.shopify.com/store/flowtica`
-2. 进入 **Products** → 点击某个产品
-3. **Product ID**：地址栏 `products/` 后的数字，如 `products/9200928260352` → GID 为 `gid://shopify/Product/9200928260352`
-4. **Variant ID**：点击左侧某个 variant，地址栏变为 `products/9200928260352/variants/47216813670656` → GID 为 `gid://shopify/ProductVariant/47216813670656`
+```graphql
+# ✅ 推荐：按 Handle 查询（跨店铺通用，代码无需修改）
+product(handle: "flowtica-scribe") { ... }
 
-当前使用的关键 ID：
+# ❌ 不推荐：按 GID 查询（每个店铺的 GID 不同，硬编码会导致多店铺部署失败）
+product(id: "gid://shopify/Product/9200928260352") { ... }
+```
 
-| 产品 | Variant 名称 | Variant ID | GID |
-|------|-------------|------------|-----|
-| Flowtica Scribe | （取最低价 `priceRange.minVariantPrice`） | — | — |
-| Flowtica Scribe Power Set | Satin Gunmetal / Power Set / Not Now | `47216813670656` | `gid://shopify/ProductVariant/47216813670656` |
+**为什么不用 GID**：每个 Shopify 店铺的 GID 是独立自动递增的，同一个产品在不同店铺的 GID 完全不同。用 Handle 查询则只需新店铺创建产品时保持相同的 URL slug 即可
+
+所有产品 Handle 统一定义在 `app/config/constants.ts` 的 `PRODUCTS` 常量中
 
 ---
 
